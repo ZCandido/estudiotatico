@@ -62,13 +62,21 @@ const sectionTitleStyle = {
   fontWeight: 800,
 };
 
-const listItemStyle = {
+const cardStyle = {
+  borderRadius: 18,
+  background: "rgba(255,255,255,0.05)",
+  border: "1px solid rgba(255,255,255,0.08)",
+  padding: 14,
+};
+
+const chipStyle = {
   padding: "8px 10px",
   borderRadius: 10,
   background: "rgba(255,255,255,0.06)",
   cursor: "grab",
-  marginBottom: 6,
   userSelect: "none",
+  minWidth: 140,
+  textAlign: "center",
 };
 
 export default function EstudioTatico() {
@@ -77,7 +85,6 @@ export default function EstudioTatico() {
 
   const [players, setPlayers] = useState(INITIAL_PLAYERS);
   const [bench, setBench] = useState(INITIAL_BENCH);
-
   const [opponents, setOpponents] = useState(INITIAL_OPPONENTS);
 
   const [draggingPlayer, setDraggingPlayer] = useState(null);
@@ -86,7 +93,7 @@ export default function EstudioTatico() {
 
   const [lastPos, setLastPos] = useState({ x: 50, y: 50 });
   const [showOpponent, setShowOpponent] = useState(true);
-  const [showNumbers, setShowNumbers] = useState(true);
+  const [showBanks, setShowBanks] = useState(true);
 
   function movePlayer(id, x, y) {
     setPlayers((prev) =>
@@ -184,9 +191,9 @@ export default function EstudioTatico() {
 
   const playerLabelStyle = {
     marginTop: 6,
-    width: 92,
+    width: 96,
     textAlign: "center",
-    fontSize: 11,
+    fontSize: 12,
     lineHeight: 1.15,
     color: "white",
     fontWeight: 700,
@@ -266,9 +273,9 @@ export default function EstudioTatico() {
                 </button>
                 <button
                   style={buttonStyle}
-                  onClick={() => setShowNumbers((s) => !s)}
+                  onClick={() => setShowBanks((s) => !s)}
                 >
-                  {showNumbers ? "Ocultar números" : "Mostrar números"}
+                  {showBanks ? "Ocultar bancos" : "Mostrar bancos"}
                 </button>
                 <button style={buttonStyle} onClick={resetAll}>
                   Resetar
@@ -280,45 +287,10 @@ export default function EstudioTatico() {
 
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "220px 1fr 220px",
-            gap: 16,
-            alignItems: "start",
+            ...cardStyle,
+            padding: 10,
           }}
         >
-          <div
-            style={{
-              borderRadius: 18,
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              padding: 14,
-            }}
-          >
-            <h3 style={sectionTitleStyle}>Banco</h3>
-            {bench.map((p) => (
-              <div
-                key={p.id}
-                onMouseDown={() => setDraggingBench(p.id)}
-                style={listItemStyle}
-              >
-                <strong>{p.shirt ? `${p.shirt} · ` : ""}</strong>
-                {p.name}
-              </div>
-            ))}
-
-            <div
-              style={{
-                marginTop: 12,
-                fontSize: 12,
-                color: "rgba(255,255,255,0.7)",
-                lineHeight: 1.35,
-              }}
-            >
-              Arraste um reserva para o campo. Se soltar em cima de um titular,
-              a substituição é automática.
-            </div>
-          </div>
-
           <div
             style={{
               borderRadius: 28,
@@ -478,8 +450,8 @@ export default function EstudioTatico() {
               >
                 <div
                   style={{
-                    width: 38,
-                    height: 38,
+                    width: 40,
+                    height: 40,
                     borderRadius: "50%",
                     border: "3px solid rgba(255,255,255,0.85)",
                     background:
@@ -488,12 +460,12 @@ export default function EstudioTatico() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 10,
+                    fontSize: 11,
                     fontWeight: 700,
                     boxShadow: "0 6px 16px rgba(0,0,0,0.35)",
                   }}
                 >
-                  {showNumbers ? p.shirt : ""}
+                  {p.shirt}
                 </div>
                 <div style={playerLabelStyle}>{p.name}</div>
               </div>
@@ -521,8 +493,8 @@ export default function EstudioTatico() {
                   >
                     <div
                       style={{
-                        width: 38,
-                        height: 38,
+                        width: 40,
+                        height: 40,
                         borderRadius: "50%",
                         border: "3px solid #93c5fd",
                         background:
@@ -531,58 +503,88 @@ export default function EstudioTatico() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: 10,
+                        fontSize: 11,
                         fontWeight: 700,
                         boxShadow: "0 6px 16px rgba(0,0,0,0.35)",
                       }}
                     >
-                      {showNumbers ? p.shirt : ""}
+                      {p.shirt}
                     </div>
                     <div style={playerLabelStyle}>{p.name}</div>
                   </div>
                 ))}
           </div>
 
-          <div
-            style={{
-              borderRadius: 18,
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              padding: 14,
-            }}
-          >
-            <h3 style={sectionTitleStyle}>Adversário</h3>
+          {showBanks && (
+            <div
+              style={{
+                marginTop: 14,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 14,
+              }}
+            >
+              <div style={cardStyle}>
+                <h3 style={sectionTitleStyle}>Banco</h3>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 8,
+                  }}
+                >
+                  {bench.map((p) => (
+                    <div
+                      key={p.id}
+                      onMouseDown={() => setDraggingBench(p.id)}
+                      style={chipStyle}
+                    >
+                      <strong>{p.shirt ? `${p.shirt} · ` : ""}</strong>
+                      {p.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-            {showOpponent ? (
-              opponents
-                .filter((o) => !o.inField)
-                .map((p) => (
+              <div style={cardStyle}>
+                <h3 style={sectionTitleStyle}>Adversário</h3>
+                {showOpponent ? (
                   <div
-                    key={p.id}
-                    onMouseDown={() => {
-                      setDraggingOpponent(p.id);
-                      moveOpponent(p.id, 88, 50);
-                    }}
                     style={{
-                      ...listItemStyle,
-                      cursor: "grab",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 8,
                     }}
                   >
-                    <strong>{showNumbers ? `${p.shirt} · ` : ""}</strong>
-                    {p.name}
+                    {opponents
+                      .filter((o) => !o.inField)
+                      .map((p) => (
+                        <div
+                          key={p.id}
+                          onMouseDown={() => {
+                            setDraggingOpponent(p.id);
+                            moveOpponent(p.id, 88, 50);
+                          }}
+                          style={chipStyle}
+                        >
+                          <strong>{p.shirt} · </strong>
+                          {p.name}
+                        </div>
+                      ))}
                   </div>
-                ))
-            ) : (
-              <div
-                style={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.65)",
-                }}
-              >
-                Adversário oculto.
+                ) : (
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: "rgba(255,255,255,0.65)",
+                    }}
+                  >
+                    Adversário oculto.
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
