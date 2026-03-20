@@ -15,13 +15,48 @@ const INITIAL_PLAYERS = [
 ];
 
 const INITIAL_BENCH = [
-  { id: 100, shirt: "27", name: "Bruno Henrique" },
-  { id: 101, shirt: "18", name: "De La Cruz" },
-  { id: 102, shirt: "26", name: "Alex Sandro" },
-  { id: 103, shirt: "13", name: "Danilo" },
-  { id: 104, shirt: "20", name: "L. Paquetá" },
-  { id: 105, shirt: "15", name: "Carrascal" },
-  { id: 106, shirt: "19", name: "G. Plata" },
+  {
+    id: 100,
+    shirt: "27",
+    name: "Bruno Henrique",
+    image: "/players/bruno_henrique.png",
+  },
+  {
+    id: 101,
+    shirt: "18",
+    name: "De La Cruz",
+    image: "/players/de_la_cruz.png",
+  },
+  {
+    id: 102,
+    shirt: "26",
+    name: "Alex Sandro",
+    image: "/players/alex_sandro.png",
+  },
+  {
+    id: 103,
+    shirt: "13",
+    name: "Danilo",
+    image: "/players/danilo.png",
+  },
+  {
+    id: 104,
+    shirt: "20",
+    name: "L. Paquetá",
+    image: "/players/paqueta.png",
+  },
+  {
+    id: 105,
+    shirt: "15",
+    name: "Carrascal",
+    image: "/players/carrascal.png",
+  },
+  {
+    id: 106,
+    shirt: "19",
+    name: "G. Plata",
+    image: "/players/plata.png",
+  },
 ];
 
 const INITIAL_OPPONENTS = Array.from({ length: 11 }, (_, i) => ({
@@ -80,8 +115,8 @@ const chipStyle = {
 };
 
 export default function EstudioTatico() {
-  const [channelName] = useState("Estúdio Tático");
-  const [subtitle] = useState("Substituição automática por arraste");
+  const [channelName] = useState("Abre Alas FC");
+  const [subtitle] = useState("O canal que chama o chat de você");
 
   const [players, setPlayers] = useState(INITIAL_PLAYERS);
   const [bench, setBench] = useState(INITIAL_BENCH);
@@ -534,15 +569,33 @@ export default function EstudioTatico() {
                   }}
                 >
                   {bench.map((p) => (
-                    <div
-                      key={p.id}
-                      onMouseDown={() => setDraggingBench(p.id)}
-                      style={chipStyle}
-                    >
-                      <strong>{p.shirt ? `${p.shirt} · ` : ""}</strong>
-                      {p.name}
-                    </div>
-                  ))}
+  <div
+    key={p.id}
+    onMouseDown={() => setDraggingBench(p.id)}
+    style={{
+      ...chipStyle,
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "6px 10px"
+    }}
+  >
+    <img
+      src={p.image}
+      alt={p.name}
+      style={{
+        width: 28,
+        height: 50,
+        objectFit: "contain"
+      }}
+    />
+
+    <div>
+      <strong>{p.shirt ? `${p.shirt} · ` : ""}</strong>
+      {p.name}
+    </div>
+  </div>
+))}
                 </div>
               </div>
 
